@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  zuul:
+    image: zuul
+    build: 
+      context: './zuul'
+    ports:
+      - '80:7001'
+    depends_on: 
+      - eureka
+  eureka:
+    image: springcloud/eureka
+    expose:
+      - 8761
+  database:
+    image: mongo
+    container_name: database
+    expose:
+      - 8081
+  lets-chat:
+    image: lets-chat
+    build: 
+      context: './lets-chat'
+    environment:
+      APP_NAME: lets-chat
+      EUREKA_HOST: eureka
+      EUREKA_PORT: 8761
+      LCB_DATABASE_URI: mongodb://database/letschat
+    expose:
+      - 5000
+    depends_on:
+      - database
+      - eureka
