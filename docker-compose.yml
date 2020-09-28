@@ -1,10 +1,40 @@
 version: '3.7'
 services:
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on: 
+      - lets-chat-1
+      - lets-chat-2
+      - lets-chat-3
+    logging:
+        driver: none
   mongo:
     image: mongo
-  lets-chat:
+    logging:
+      driver: none
+  lets-chat-1:
     image: sdelements/lets-chat
-    ports:
-      - 8080:8080
+    environment: 
+      NODE_ENV: dev
+      DEBUG: '*'
     depends_on:
       - mongo
+  lets-chat-2:
+    image: sdelements/lets-chat
+    environment: 
+      NODE_ENV: dev
+      DEBUG: '*'
+    depends_on:
+      - mongo
+  lets-chat-3:
+    image: sdelements/lets-chat
+    environment: 
+      NODE_ENV: dev
+      DEBUG: '*'
+    depends_on:
+      - mongo
+    
